@@ -1,0 +1,15 @@
+.idea/
+.vscode/
+.vs/
+.next/
+.env
+schema/
+schemas/
+node_modules/
+build/
+dist/
+tmp/
+temp/
+logs/
+out/
+.netlify/

@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": [
+      "dom",
+      "es6",
+      "es2019",
+      "esnext.asynciterable"
+    ],
+    "sourceMap": true,
+    "outDir": "./build",
+    "moduleResolution": "node",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin"
+      }
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    ".vscode"
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "typeRoots": [
+    "./src/@types/",
+    "./node_modules/@types"
+  ]
+}
