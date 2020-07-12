@@ -1,4 +1,4 @@
-import {InputType, Field} from "type-graphql";
+import {InputType, Field, ClassType} from "type-graphql";
 
 export interface IWhereFilter {
   [key: string]: any;
@@ -9,32 +9,43 @@ export interface IWhereAggregate {
   or?: IWhereFilter[];
 }
 
+export function createWhereFilterInput<T>(FilterType: ClassType<T>) {
+  @InputType({isAbstract: true})
+  abstract class WhereInput implements IWhereFilter {
+    @Field(type => FilterType, {nullable: true})
+    is?: typeof FilterType;
+
+    @Field(type => FilterType, {nullable: true})
+    not?: typeof FilterType;
+
+    @Field(type => FilterType, {nullable: true})
+    in?: typeof FilterType;
+
+    @Field(type => FilterType, {nullable: true})
+    notIn?: typeof FilterType;
+
+    @Field(type => FilterType, {nullable: true})
+    lt?: typeof FilterType;
+
+    @Field(type => FilterType, {nullable: true})
+    lte?: typeof FilterType;
+
+    @Field(type => FilterType, {nullable: true})
+    gt?: typeof FilterType;
+
+    @Field(type => FilterType, {nullable: true})
+    gte?: typeof FilterType;
+
+  }
+
+  return WhereInput;
+}
+
 @InputType()
-export class StringWhere implements IWhereFilter {
-  @Field((type) => String, {nullable: true})
-  is?: String;
+export class NumberWhere extends createWhereFilterInput(Number) {}
 
-  @Field((type) => String, {nullable: true})
-  not?: String;
-
-  @Field((type) => [String], {nullable: true})
-  in?: [String];
-
-  @Field((type) => [String], {nullable: true})
-  notIn?: [String];
-
-  @Field((type) => String, {nullable: true})
-  lt?: String;
-
-  @Field((type) => String, {nullable: true})
-  lte?: String;
-
-  @Field((type) => String, {nullable: true})
-  gt?: String;
-
-  @Field((type) => String, {nullable: true})
-  gte?: String;
-
+@InputType()
+export class StringWhere extends createWhereFilterInput(String) {
   @Field((type) => String, {nullable: true})
   contains?: String;
 
@@ -55,31 +66,4 @@ export class StringWhere implements IWhereFilter {
 
   @Field((type) => String, {nullable: true})
   search?: String;
-}
-
-InputType()
-export class NumberWhere implements IWhereFilter {
-  @Field((type) => Number, {nullable: true})
-  is?: Number;
-
-  @Field((type) => Number, {nullable: true})
-  not?: Number;
-
-  @Field((type) => [Number], {nullable: true})
-  in?: [Number];
-
-  @Field((type) => [Number], {nullable: true})
-  notIn?: [Number];
-
-  @Field((type) => Number, {nullable: true})
-  lt?: Number;
-
-  @Field((type) => Number, {nullable: true})
-  lte?: Number;
-
-  @Field((type) => Number, {nullable: true})
-  gt?: Number;
-
-  @Field((type) => Number, {nullable: true})
-  gte?: Number;
 }
