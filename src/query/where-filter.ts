@@ -4,11 +4,6 @@ export interface IWhereFilter {
   [key: string]: any;
 }
 
-export interface IWhereAggregate {
-  and?: IWhereFilter[];
-  or?: IWhereFilter[];
-}
-
 export function createWhereFilterInput<T>(FilterType: ClassType<T>) {
   @InputType({isAbstract: true})
   abstract class WhereInput implements IWhereFilter {
