@@ -3,6 +3,11 @@ import { BaseEntity } from "../graphql/base-entity";
 import { PageInfo } from "./page-info";
 import { getPagination } from "./pagination";
 
+export interface IConnectionDefinition {
+  Connection: ClassType;
+  Edge: ClassType;
+}
+
 export function createConnectionDefinition<T extends ClassType<BaseEntity>>(
   resource: string,
   NodeType: T
@@ -28,10 +33,7 @@ export function createConnectionDefinition<T extends ClassType<BaseEntity>>(
     edges: Edge[];
   }
 
-  return {
-    Connection,
-    Edge
-  };
+  return { Connection, Edge } as IConnectionDefinition;
 }
 
 @ArgsType()

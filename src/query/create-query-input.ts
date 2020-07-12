@@ -1,4 +1,4 @@
-import {TEntityQueryable} from "../graphql/create-resolver";
+import {TEntityQueryable} from "../graphql/resolver";
 import {BaseEntity} from "../graphql/base-entity";
 import {IWhereAggregate} from "./reduce-aggregate";
 import {Field, InputType, ClassType} from "type-graphql";

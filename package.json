@@ -16,6 +16,7 @@
     "@types/morgan": "^1.7.37",
     "@types/nanoid": "^2.1.0",
     "@types/node": "^8.0.29",
+    "@types/pluralize": "^0.0.29",
     "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.8.2"
@@ -36,6 +37,7 @@
     "morgan": "^1.9.1",
     "nanoid": "^2.1.11",
     "pg": "^7.18.2",
+    "pluralize": "^8.0.0",
     "type-graphql": "^1.0.0-rc.3",
     "typeorm": "^0.2.25"
   }

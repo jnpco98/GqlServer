@@ -6,6 +6,7 @@ import { IWhereAggregate, reduceAggregate } from "../query/reduce-aggregate";
 import { ClassType } from "type-graphql";
 import { DEFAULT_SORT_KEY, DEFAULT_DB_SORT_KEY } from "./pagination";
 import { InvalidSortKeyError } from "./error";
+import { PageInfo } from "./page-info";
 
 export interface ICursorDecoded {
   primary: number;
@@ -34,6 +35,15 @@ export interface ICursorConnectionParams<T> {
   queryBuilder: SelectQueryBuilder<T>;
   connArgs: ConnectionArgs;
   query?: IWhereAggregate;
+}
+
+export interface ICursorConnection<T> {
+  totalCount: number;
+  pageInfo: PageInfo;
+  edges: {
+    node: T,
+    cursor: string
+  }[];
 }
 
 export async function createCursorConnection<T extends BaseEntity>(
@@ -82,5 +92,5 @@ export async function createCursorConnection<T extends BaseEntity>(
       hasNextPage, hasPreviousPage, startCursor, endCursor, count: entities.length
     },
     edges
-  };
+  } as ICursorConnection<T>;
 }
