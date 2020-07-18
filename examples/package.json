@@ -1,0 +1,39 @@
+{
+  "scripts": {
+    "start": "yarn run build && node --require dotenv/config build/server.js",
+    "dev": "ts-node-dev --files --respawn --inspect=9000 --require dotenv/config src/server.ts",
+    "migration:create": "ts-node ./node_modules/typeorm/cli.js migration:generate -c development -n",
+    "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -c development",
+    "build": "tsc",
+    "export-schema": "ts-node --files --require dotenv/config ./src/schema/export-schema.ts"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.16.0",
+    "bcrypt": "^5.0.0",
+    "class-validator": "^0.12.2",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "gql-server": "git+ssh://git@github.com:ukiyo-apps/GqlServer.git#0.1.0",
+    "graphql": "^15.3.0",
+    "graphql-query-complexity": "^0.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "log4js": "^6.3.0",
+    "pg": "^8.3.0",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.0.0-rc.3",
+    "typeorm": "^0.2.25"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/express": "^4.17.7",
+    "@types/express-serve-static-core": "^4.17.8",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/node": "^14.0.23",
+    "ts-node": "^8.10.2",
+    "ts-node-dev": "^1.0.0-pre.52",
+    "typescript": "^3.8.2"
+  }
+}

@@ -13,3 +13,4 @@ temp/
 logs/
 out/
 .netlify/
+**/*.tgz
