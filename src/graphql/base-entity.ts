@@ -15,7 +15,7 @@ export abstract class BaseEntity extends ActiveRecordBaseEntity {
   @PrimaryColumn({ name: 'entity_id', type: 'text' })
   id: string;
 
-  @(Generated()('increment'))
+  @Generated('increment')
   @Column({ name: 'increment_id', type: 'integer' })
   incrementId: number;
 
