@@ -12,8 +12,8 @@ import { GraphQLObjectType } from 'graphql';
 import { createCursorConnection, ICursorConnection } from '../relay/cursor';
 import { createQueryInput } from '../query/create-query-input';
 
-export type TEntityQueryable<T, Q extends IWhereFilter> = {
-  [P in keyof T]?: Q;
+export type TEntityQueryable<T> = {
+  [P in keyof T]?: IWhereFilter;
 };
 
 export interface IBaseResolverParams<T extends BaseEntity> {
@@ -28,14 +28,14 @@ export interface IBaseResolverParams<T extends BaseEntity> {
   ) => Promise<T | ICursorConnection<T> | null>;
 }
 
-export interface IResolverQueryableParams<T extends BaseEntity, Q extends IWhereFilter> extends IBaseResolverParams<T> {
+export interface IResolverQueryableParams<T extends BaseEntity> extends IBaseResolverParams<T> {
   ConnectionType: IConnectionDefinition;
-  QueryableInputType?: ClassType<TEntityQueryable<T, Q>>;
+  QueryableInputType?: ClassType<TEntityQueryable<T>>;
 }
 
 export interface IResolverMutableParams<T extends BaseEntity, U> extends IBaseResolverParams<T> {
   MutationInputType: ClassType<U>;
-  getCreatorId: () => string;
+  getCreatorId?: () => string;
 }
 
 export function createGetResolver<T extends BaseEntity>(params: IBaseResolverParams<T>) {
@@ -58,8 +58,8 @@ export function createGetResolver<T extends BaseEntity>(params: IBaseResolverPar
   return BaseGetResolver;
 }
 
-export function createSearchResolver<T extends BaseEntity, Q extends IWhereFilter>(
-  params: IResolverQueryableParams<T, Q>
+export function createSearchResolver<T extends BaseEntity>(
+  params: IResolverQueryableParams<T>
 ) {
   const {
     EntityType,

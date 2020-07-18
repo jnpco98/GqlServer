@@ -25,4 +25,5 @@ export async function createSchema(resolverGlob: string = DEFAULT_RESOLVER_GLOB,
       authMode: 'null'
     });
   }
+  return schema;
 }

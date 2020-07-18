@@ -4,11 +4,11 @@ import { IWhereAggregate } from './reduce-aggregate';
 import { Field, InputType, ClassType } from 'type-graphql';
 import { IWhereFilter } from './where-filter';
 
-export function createQueryInput<T extends IWhereFilter, U extends TEntityQueryable<BaseEntity, T>>(
+export function createQueryInput<T extends BaseEntity, U extends TEntityQueryable<T>>(
   resourceName: string,
   ReturnType: ClassType<U>
 ) {
-  @InputType(`${name}Where`)
+  @InputType(`${resourceName}Where`)
   class WhereInput implements IWhereAggregate {
     @Field((type) => [ReturnType], { nullable: true })
     or?: [typeof ReturnType];

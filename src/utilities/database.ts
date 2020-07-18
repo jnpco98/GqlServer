@@ -32,7 +32,7 @@ async function buildConfiguration() {
   return connectionParams;
 }
 
-export async function initializeConnection(dropDatabaseGuardOptions: IDropDatabaseGuardOptions) {
+export async function initializeConnection(dropDatabaseGuardOptions: IDropDatabaseGuardOptions = {}) {
   if (isProduction() && (!username || !password || !host || !port || !db))
     throw new Error('Database env has not been setup properly');
 
