@@ -143,6 +143,8 @@ export function createUpdateResolver<T extends BaseEntity, U>(params: IResolverM
       return await entity.save();
     }
   }
+
+  return BaseUpdateResolver;
 }
 
 export function createDeleteResolver<T extends BaseEntity, U>(params: IResolverMutableParams<T, U>) {
@@ -169,4 +171,6 @@ export function createDeleteResolver<T extends BaseEntity, U>(params: IResolverM
       return await entity.save();
     }
   }
+
+  return BaseDeleteResolver;
 }
