@@ -3,11 +3,11 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 import { environment, isProduction } from './environment';
 import { Log } from './log';
 
-const username = process.env.GQL_SERVER_USERNAME!;
-const password = process.env.GQL_SERVER_PASSWORD!;
+const username = process.env.GQL_DB_USERNAME!;
+const password = process.env.GQL_DB_PASSWORD!;
+const port = process.env.GQL_DB_PORT!;
+const db = process.env.GQL_DB_NAME!;
 const host = process.env.GQL_SERVER_HOST!;
-const port = process.env.GQL_SERVER_PORT!;
-const db = process.env.GQL_SERVER_DATABASE!;
 
 export interface IDropDatabaseGuardOptions {
   drop?: boolean;
@@ -33,7 +33,7 @@ async function buildConfiguration() {
 }
 
 export async function initializeConnection(dropDatabaseGuardOptions: IDropDatabaseGuardOptions = {}) {
-  if (isProduction() && (!username || !password || !host || !port || !db))
+  if (!username || !password || !host || !port || !db)
     throw new Error('Database env has not been setup properly');
 
   const { drop, database } = dropDatabaseGuardOptions;
