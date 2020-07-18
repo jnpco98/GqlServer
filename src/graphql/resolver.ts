@@ -38,6 +38,12 @@ export interface IResolverMutableParams<T extends BaseEntity, U> extends IBaseRe
   getCreatorId?: () => string;
 }
 
+export type TResolverResult<T> = Promise<T | ICursorConnection<T> | null | undefined>;
+
+interface IBaseGetResolver<T> {
+  apply: (id: string, ctx: IContext) => TResolverResult<T>;
+}
+
 export function createGetResolver<T extends BaseEntity>(params: IBaseResolverParams<T>) {
   const { EntityType, resource, accessLevels, contextCallback, middleware } = params;
 
@@ -46,7 +52,7 @@ export function createGetResolver<T extends BaseEntity>(params: IBaseResolverPar
     @Authorized(accessLevels || [])
     @UseMiddleware(middleware || [])
     @Query((returns) => EntityType, { name: `${resource}`, nullable: true })
-    async getOne(@Arg('id', (type) => ID) id: string, @Ctx() ctx: IContext) {
+    async apply(@Arg('id', (type) => ID) id: string, @Ctx() ctx: IContext) {
       const entity = await getRepository(EntityType).findOne({
         where: { id, archived: false }
       });
@@ -55,7 +61,11 @@ export function createGetResolver<T extends BaseEntity>(params: IBaseResolverPar
     }
   }
 
-  return BaseGetResolver;
+  return BaseGetResolver as IBaseGetResolver<T>;
+}
+
+interface IBaseSearchResolver<T> {
+  apply: (ctx: IContext, connArgs: ConnectionArgs, query: IWhereAggregate) => TResolverResult<T>;
 }
 
 export function createSearchResolver<T extends BaseEntity>(
@@ -81,7 +91,7 @@ export function createSearchResolver<T extends BaseEntity>(
       nullable: true,
       complexity: ({ childComplexity, args }) => (args.first || args.last) * childComplexity
     })
-    async search(
+    async apply(
       @Ctx() ctx: IContext,
       @Args() connArgs: ConnectionArgs,
       @Arg(`where`, () => WhereInputType || GraphQLObjectType, { nullable: true }) query?: IWhereAggregate
@@ -94,7 +104,11 @@ export function createSearchResolver<T extends BaseEntity>(
     }
   }
 
-  return BaseSearchResolver;
+  return BaseSearchResolver as IBaseSearchResolver<T>;
+}
+
+interface IBaseInsertResolver<T, U> {
+  apply: (data: U, ctx: IContext) => TResolverResult<T>;
 }
 
 export function createInsertResolver<T extends BaseEntity, U>(params: IResolverMutableParams<T, U>) {
@@ -108,7 +122,7 @@ export function createInsertResolver<T extends BaseEntity, U>(params: IResolverM
       name: `${resource}Create`,
       nullable: true
     })
-    async create(@Arg('data', () => MutationInputType) data: U, @Ctx() ctx: IContext) {
+    async apply(@Arg('data', () => MutationInputType) data: U, @Ctx() ctx: IContext) {
       const entity = getRepository(EntityType).create(data);
       if (getCreatorId) entity.creatorId = getCreatorId();
       if (typeof contextCallback === 'function') return await contextCallback(entity, ctx);
@@ -116,7 +130,11 @@ export function createInsertResolver<T extends BaseEntity, U>(params: IResolverM
     }
   }
 
-  return BaseInsertResolver;
+  return BaseInsertResolver as IBaseInsertResolver<T, U>;
+}
+
+interface IBaseUpdateResolver<T, U> {
+  apply: (id: string, data: U, ctx: IContext) => TResolverResult<T>;
 }
 
 export function createUpdateResolver<T extends BaseEntity, U>(params: IResolverMutableParams<T, U>) {
@@ -130,7 +148,7 @@ export function createUpdateResolver<T extends BaseEntity, U>(params: IResolverM
       name: `${resource}Update`,
       nullable: true
     })
-    async update(@Arg('id', () => ID) id: string, @Arg('data', () => MutationInputType) data: U, @Ctx() ctx: IContext) {
+    async apply(@Arg('id', () => ID) id: string, @Arg('data', () => MutationInputType) data: U, @Ctx() ctx: IContext) {
       const existing = await getRepository(EntityType).findOne({
         where: { id, archived: false }
       });
@@ -144,7 +162,11 @@ export function createUpdateResolver<T extends BaseEntity, U>(params: IResolverM
     }
   }
 
-  return BaseUpdateResolver;
+  return BaseUpdateResolver as IBaseUpdateResolver<T, U>;
+}
+
+interface IBaseDeleteResolver<T> {
+  apply: (id: string, ctx: IContext) => TResolverResult<T>;
 }
 
 export function createDeleteResolver<T extends BaseEntity, U>(params: IResolverMutableParams<T, U>) {
@@ -158,7 +180,7 @@ export function createDeleteResolver<T extends BaseEntity, U>(params: IResolverM
       name: `${resource}Delete`,
       nullable: true
     })
-    async delete(@Arg('id', () => ID) id: string, @Ctx() ctx: IContext) {
+    async apply(@Arg('id', () => ID) id: string, @Ctx() ctx: IContext) {
       const existing = await getRepository(EntityType).findOne({
         where: { id, archived: true }
       });
@@ -172,5 +194,5 @@ export function createDeleteResolver<T extends BaseEntity, U>(params: IResolverM
     }
   }
 
-  return BaseDeleteResolver;
+  return BaseDeleteResolver as IBaseDeleteResolver<T>;
 }

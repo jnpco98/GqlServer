@@ -1,10 +1,11 @@
 {
   "name": "gql-server",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "prettier": "prettier --print-width 100 --single-route --write **/*.ts*"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",

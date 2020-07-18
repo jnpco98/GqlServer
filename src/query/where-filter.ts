@@ -32,7 +32,7 @@ export function createWhereFilterInput<T>(FilterType: ClassType<T>) {
     gte?: typeof FilterType;
   }
 
-  return WhereInput;
+  return WhereInput as ClassType<IWhereFilter>;
 }
 
 @InputType()
