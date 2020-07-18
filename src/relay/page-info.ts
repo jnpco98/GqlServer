@@ -1,4 +1,4 @@
-import {Field, ObjectType} from 'type-graphql';
+import { Field, ObjectType } from 'type-graphql';
 
 /**
  * Describes current page in accordance to
@@ -25,13 +25,13 @@ export class PageInfo {
   /**
    * Cursor of the first element in the list
    */
-  @Field(() => String, {nullable: true})
+  @Field(() => String, { nullable: true })
   startCursor: String;
 
   /**
    * Cursor of the last element in the list
    */
-  @Field(() => String, {nullable: true})
+  @Field(() => String, { nullable: true })
   endCursor: String;
 
   /**

@@ -1,6 +1,6 @@
-import {IWhereFilter} from "./where-filter";
-import {SelectQueryBuilder, Brackets} from "typeorm";
-import {reduceInput} from "./reduce-input";
+import { IWhereFilter } from './where-filter';
+import { SelectQueryBuilder, Brackets } from 'typeorm';
+import { reduceInput } from './reduce-input';
 
 export interface IWhereAggregate {
   and?: IWhereFilter[];

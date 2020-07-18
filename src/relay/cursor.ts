@@ -1,12 +1,12 @@
-import { BaseEntity } from "../graphql/base-entity";
-import { base64, unBase64 } from "../utilities/base64";
-import { SelectQueryBuilder, Brackets } from "typeorm";
-import { ConnectionArgs } from "./connection";
-import { IWhereAggregate, reduceAggregate } from "../query/reduce-aggregate";
-import { ClassType } from "type-graphql";
-import { DEFAULT_SORT_KEY, DEFAULT_DB_SORT_KEY } from "./pagination";
-import { InvalidSortKeyError } from "./error";
-import { PageInfo } from "./page-info";
+import { BaseEntity } from '../graphql/base-entity';
+import { base64, unBase64 } from '../utilities/base64';
+import { SelectQueryBuilder, Brackets } from 'typeorm';
+import { ConnectionArgs } from './connection';
+import { IWhereAggregate, reduceAggregate } from '../query/reduce-aggregate';
+import { ClassType } from 'type-graphql';
+import { DEFAULT_SORT_KEY, DEFAULT_DB_SORT_KEY } from './pagination';
+import { InvalidSortKeyError } from './error';
+import { PageInfo } from './page-info';
 
 export interface ICursorDecoded {
   primary: number;
@@ -16,7 +16,7 @@ export interface ICursorDecoded {
 
 function createCursor(node: BaseEntity, sortKey?: string) {
   let secondary = (node as any)[sortKey || '_'];
-  if(typeof secondary === 'undefined') secondary = node.incrementId;
+  if (typeof secondary === 'undefined') secondary = node.incrementId;
 
   const cursorEncoded: ICursorDecoded = {
     primary: node.incrementId,
@@ -41,8 +41,8 @@ export interface ICursorConnection<T> {
   totalCount: number;
   pageInfo: PageInfo;
   edges: {
-    node: T,
-    cursor: string
+    node: T;
+    cursor: string;
   }[];
 }
 
@@ -53,9 +53,7 @@ export async function createCursorConnection<T extends BaseEntity>(
   const { queryBuilder, connArgs, query } = connParams;
   const { sortKey = DEFAULT_SORT_KEY, reverse, pagination } = connArgs;
 
-  queryBuilder.andWhere(
-    new Brackets((qb) => qb.andWhere(`archived = :archived`, { archived: false }))
-  );
+  queryBuilder.andWhere(new Brackets((qb) => qb.andWhere(`archived = :archived`, { archived: false })));
 
   const { limit, dbSortKey, direction } = pagination(EntityType, queryBuilder);
 
@@ -71,8 +69,7 @@ export async function createCursorConnection<T extends BaseEntity>(
   const firstEdge = entities[0];
   const lastEdge = entities[entities.length - 1];
 
-  if (sortKey && firstEdge && (firstEdge as any)[sortKey || ''] === undefined)
-    throw new InvalidSortKeyError();
+  if (sortKey && firstEdge && (firstEdge as any)[sortKey || ''] === undefined) throw new InvalidSortKeyError();
 
   const edges = entities.map((node) => ({
     node,
@@ -89,7 +86,11 @@ export async function createCursorConnection<T extends BaseEntity>(
   return {
     totalCount: count,
     pageInfo: {
-      hasNextPage, hasPreviousPage, startCursor, endCursor, count: entities.length
+      hasNextPage,
+      hasPreviousPage,
+      startCursor,
+      endCursor,
+      count: entities.length
     },
     edges
   } as ICursorConnection<T>;

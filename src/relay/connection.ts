@@ -1,17 +1,14 @@
-import { ObjectType, ClassType, Field, ArgsType } from "type-graphql";
-import { BaseEntity } from "../graphql/base-entity";
-import { PageInfo } from "./page-info";
-import { getPagination } from "./pagination";
+import { ObjectType, ClassType, Field, ArgsType } from 'type-graphql';
+import { BaseEntity } from '../graphql/base-entity';
+import { PageInfo } from './page-info';
+import { getPagination } from './pagination';
 
 export interface IConnectionDefinition {
   Connection: ClassType;
   Edge: ClassType;
 }
 
-export function createConnectionDefinition<T extends ClassType<BaseEntity>>(
-  resource: string,
-  NodeType: T
-) {
+export function createConnectionDefinition<T extends ClassType<BaseEntity>>(resource: string, NodeType: T) {
   @ObjectType(`${resource}Edge`)
   class Edge {
     @Field(() => NodeType)
@@ -25,7 +22,7 @@ export function createConnectionDefinition<T extends ClassType<BaseEntity>>(
   class Connection {
     @Field()
     totalCount: number;
-    
+
     @Field()
     pageInfo: PageInfo;
 

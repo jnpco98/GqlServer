@@ -1,15 +1,15 @@
-import {Brackets, getRepository} from 'typeorm';
-import {ClassType} from 'type-graphql';
+import { Brackets, getRepository } from 'typeorm';
+import { ClassType } from 'type-graphql';
 
-import {BaseEntity} from '../graphql/base-entity';
-import {getConnectionProperties} from '../relay/pagination';
+import { BaseEntity } from '../graphql/base-entity';
+import { getConnectionProperties } from '../relay/pagination';
 
 interface AggregateParams<T> {
-	EntityType: ClassType<T>;
-	field: keyof T & string;
-	array?: boolean;
-	order?: 'ASC' | 'DESC';
-	orderCount?: boolean;
+  EntityType: ClassType<T>;
+  field: keyof T & string;
+  array?: boolean;
+  order?: 'ASC' | 'DESC';
+  orderCount?: boolean;
 }
 
 /**
@@ -26,22 +26,21 @@ interface AggregateParams<T> {
  *    GROUP BY field;
  */
 export function consolidateAndAggregateQuery<T extends BaseEntity>(params: AggregateParams<T>) {
-	const {EntityType, field, array, order, orderCount} = params;
+  const { EntityType, field, array, order, orderCount } = params;
 
-	const queryAlias = 'e';
-	const queryBuilder = getRepository(EntityType).createQueryBuilder(queryAlias);
-	const dbField = getConnectionProperties(EntityType)[field].dbSortKey;
+  const queryAlias = 'e';
+  const queryBuilder = getRepository(EntityType).createQueryBuilder(queryAlias);
+  const dbField = getConnectionProperties(EntityType)[field].dbSortKey;
 
-	if (array) queryBuilder.select(`jsonb_array_elements(${queryAlias}.${field}::jsonb)`, 'field');
-	else queryBuilder.select(`${dbField}`, 'field');
+  if (array) queryBuilder.select(`jsonb_array_elements(${queryAlias}.${field}::jsonb)`, 'field');
+  else queryBuilder.select(`${dbField}`, 'field');
 
-	queryBuilder
-		.addSelect('COUNT(*)', 'count')
-		.andWhere(new Brackets((qb) => qb.andWhere(`archived = :isvalue`, {isvalue: false})))
-		.groupBy('field');
+  queryBuilder
+    .addSelect('COUNT(*)', 'count')
+    .andWhere(new Brackets((qb) => qb.andWhere(`archived = :isvalue`, { isvalue: false })))
+    .groupBy('field');
 
-	if (orderCount) queryBuilder.orderBy('count', order || 'ASC');
+  if (orderCount) queryBuilder.orderBy('count', order || 'ASC');
 
-	return queryBuilder.addOrderBy('field', 'ASC').getRawMany();
+  return queryBuilder.addOrderBy('field', 'ASC').getRawMany();
 }
-

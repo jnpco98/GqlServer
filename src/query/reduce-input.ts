@@ -1,6 +1,6 @@
-import {WhereExpression} from "typeorm";
-import nanoid from "nanoid";
-import {snakeCase} from "../utilities/string";
+import { WhereExpression } from 'typeorm';
+import nanoid from 'nanoid';
+import { snakeCase } from '../utilities/string';
 
 export const SEARCH_FIELD_LENGTH_LIMIT = 2000;
 
@@ -26,16 +26,12 @@ export interface IWhereFilterParams {
  *    - endsWith: field value ends with the query value (notes#1)
  *    - notEndsWith: field value doesn't end with the query value (notes#1)
  *    - search: field value contains any of the words from the query value (notes#1,2)
- * 
+ *
  * notes:
  * - 1: requires field and query value to be of type string
  * - 2: only works if the field value contains less than SEARCH_FIELD_LENGTH_LIMIT characters
  */
-export function reduceInput(
-  query: WhereExpression,
-  where: IWhereFilterParams,
-  andOr: 'andWhere' | 'orWhere'
-) {
+export function reduceInput(query: WhereExpression, where: IWhereFilterParams, andOr: 'andWhere' | 'orWhere') {
   const whereArgs = Object.entries(where);
 
   whereArgs.forEach((whereArg) => {
@@ -49,17 +45,17 @@ export function reduceInput(
 
       switch (operation) {
         case 'is': {
-          query[andOr](`${sFieldName} = :${key}`, {[key]: value});
+          query[andOr](`${sFieldName} = :${key}`, { [key]: value });
           break;
         }
 
         case 'not': {
-          query[andOr](`${sFieldName} != :${key}`, {[key]: value});
+          query[andOr](`${sFieldName} != :${key}`, { [key]: value });
           break;
         }
 
         case 'in': {
-          query[andOr](`${sFieldName} IN (:...${key})`, {[key]: value});
+          query[andOr](`${sFieldName} IN (:...${key})`, { [key]: value });
           break;
         }
 
@@ -71,22 +67,22 @@ export function reduceInput(
         }
 
         case 'lt': {
-          query[andOr](`${sFieldName} < :${key}`, {[key]: value});
+          query[andOr](`${sFieldName} < :${key}`, { [key]: value });
           break;
         }
 
         case 'lte': {
-          query[andOr](`${sFieldName} <= :${key}`, {[key]: value});
+          query[andOr](`${sFieldName} <= :${key}`, { [key]: value });
           break;
         }
 
         case 'gt': {
-          query[andOr](`${sFieldName} > :${key}`, {[key]: value});
+          query[andOr](`${sFieldName} > :${key}`, { [key]: value });
           break;
         }
 
         case 'gte': {
-          query[andOr](`${sFieldName} >= :${key}`, {[key]: value});
+          query[andOr](`${sFieldName} >= :${key}`, { [key]: value });
           break;
         }
 

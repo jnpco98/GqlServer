@@ -1,6 +1,6 @@
-import {getConnectionOptions, createConnection} from 'typeorm';
-import {PostgresConnectionOptions} from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import {environment, isProduction} from './environment';
+import { getConnectionOptions, createConnection } from 'typeorm';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { environment, isProduction } from './environment';
 import log from './log';
 
 const username = process.env.GQL_SERVER_USERNAME!;
@@ -17,8 +17,9 @@ export interface IDropDatabaseGuardOptions {
 async function buildConfiguration() {
   const configuration = await getConnectionOptions(environment);
 
-  const connectionParams: {[key: string]: any} = {
-    ...configuration, name: 'default'
+  const connectionParams: { [key: string]: any } = {
+    ...configuration,
+    name: 'default'
   };
 
   if (!isProduction()) {
@@ -35,7 +36,7 @@ export async function initializeConnection(dropDatabaseGuardOptions: IDropDataba
   if (isProduction() && (!username || !password || !host || !port || !db))
     throw new Error('Database env has not been setup properly');
 
-  const {drop, database} = dropDatabaseGuardOptions;
+  const { drop, database } = dropDatabaseGuardOptions;
   const connectionParams = await buildConfiguration();
 
   if (drop && database === connectionParams.database) {
@@ -49,7 +50,7 @@ export async function initializeConnection(dropDatabaseGuardOptions: IDropDataba
 export async function resetDatabase(database: string) {
   log.warn(`Dropping ${database}`);
   await new Promise((resolve) => setTimeout(resolve, 5000));
-  await initializeConnection({drop: true, database});
+  await initializeConnection({ drop: true, database });
   log.info('Database reset success');
   process.exit(0);
 }

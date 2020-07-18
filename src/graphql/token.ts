@@ -1,4 +1,4 @@
-import {sign} from "jsonwebtoken";
+import { sign } from 'jsonwebtoken';
 
 export interface IToken {
   [key: string]: any;
@@ -18,5 +18,5 @@ export function generateToken(data: IToken) {
     expiresIn: accessTokenExpiration
   });
 
-  return {refreshToken, accessToken};
+  return { refreshToken, accessToken };
 }
