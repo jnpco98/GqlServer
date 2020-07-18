@@ -64,4 +64,4 @@ export function logInternalError(error: Error) {
   return errorId;
 }
 
-export default log4js.getLogger();
+export const Log = log4js.getLogger();

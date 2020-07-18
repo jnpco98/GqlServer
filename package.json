@@ -4,8 +4,10 @@
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "files": ["dist"],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "release": "yarn build && yarn pack --dry"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
