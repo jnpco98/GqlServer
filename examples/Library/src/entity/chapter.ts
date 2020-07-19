@@ -1,7 +1,7 @@
-import { Entity, Column, BeforeInsert, BeforeUpdate } from "typeorm";
-import { ObjectType, InputType, Field, ID } from "type-graphql";
-import { MinLength, IsOptional } from "class-validator";
-import { BaseEntity, slugify } from "gql-server";
+import { Entity, Column, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { ObjectType, InputType, Field, ID } from 'type-graphql';
+import { MinLength, IsOptional } from 'class-validator';
+import { BaseEntity, slugify } from 'gql-server';
 
 /**
  * ORM Chapter Entity
@@ -38,11 +38,11 @@ export class Chapter extends BaseEntity implements Partial<Chapter> {
   @Field((type) => ID, { nullable: true })
   @Column({ name: 'book_id', nullable: true })
   bookId?: string;
-  
+
   @Field((type) => ID, { nullable: true })
   @Column({ name: 'previous_id', nullable: true })
   previousId?: string;
-  
+
   @Field((type) => ID, { nullable: true })
   @Column({ name: 'next_id', nullable: true })
   nextId?: string;

@@ -1,7 +1,7 @@
-import { Entity, Column, BeforeInsert } from "typeorm";
-import { ObjectType, InputType, Field, ID } from "type-graphql";
-import { Length, IsOptional, IsISBN } from "class-validator";
-import { BaseEntity, slugify } from "gql-server";
+import { Entity, Column, BeforeInsert } from 'typeorm';
+import { ObjectType, InputType, Field, ID } from 'type-graphql';
+import { Length, IsOptional, IsISBN } from 'class-validator';
+import { BaseEntity, slugify } from 'gql-server';
 
 /**
  * ORM Book Entity

@@ -33,8 +33,7 @@ async function buildConfiguration() {
 }
 
 export async function initializeConnection(dropDatabaseGuardOptions: IDropDatabaseGuardOptions = {}) {
-  if (!username || !password || !host || !port || !db)
-    throw new Error('Database env has not been setup properly');
+  if (!username || !password || !host || !port || !db) throw new Error('Database env has not been setup properly');
 
   const { drop, database } = dropDatabaseGuardOptions;
   const connectionParams = await buildConfiguration();

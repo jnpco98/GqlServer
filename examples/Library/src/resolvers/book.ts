@@ -1,16 +1,27 @@
-import { getRepository } from "typeorm";
-import { GraphQLObjectType } from "graphql";
-import { InputType, Field, Resolver, FieldResolver, Root, Args, Arg } from "type-graphql";
-import { StringWhere, createGetResolver, createSearchResolver, createInsertResolver, createUpdateResolver, createDeleteResolver, createConnectionDefinition, createCursorConnection, ConnectionArgs, IWhereAggregate } from 'gql-server';
+import { getRepository } from 'typeorm';
+import { GraphQLObjectType } from 'graphql';
+import { InputType, Field, Resolver, FieldResolver, Root, Args, Arg } from 'type-graphql';
+import {
+  StringWhere,
+  createGetResolver,
+  createSearchResolver,
+  createInsertResolver,
+  createUpdateResolver,
+  createDeleteResolver,
+  createConnectionDefinition,
+  createCursorConnection,
+  ConnectionArgs,
+  IWhereAggregate
+} from 'gql-server';
 
-import { Book } from "../entity/book";
-import { Chapter } from "../entity/chapter";
+import { Book } from '../entity/book';
+import { Chapter } from '../entity/chapter';
 import { ChapterQueryInput, ChapterConnectionDefinition } from '../resolvers/chapter';
 
 const BaseGetResolver = createGetResolver({
   EntityType: Book,
   resource: 'book'
-}) as any;
+});
 
 /**
  * Filters for querying resource
@@ -34,25 +45,25 @@ const BaseSearchResolver = createSearchResolver({
   QueryableInputType: BookQueryableInput,
   ConnectionType: ConnectionDefinition,
   resource: 'book'
-}) as any;
+});
 
 const BaseCreateResolver = createInsertResolver({
   EntityType: Book,
   MutationInputType: Book,
   resource: 'book'
-}) as any;
+});
 
 const BaseUpdateResolver = createUpdateResolver({
   EntityType: Book,
   MutationInputType: Book,
   resource: 'book'
-}) as any;
+});
 
 const BaseDeleteResolver = createDeleteResolver({
   EntityType: Book,
   MutationInputType: Book,
   resource: 'book'
-}) as any;
+});
 
 /**
  * Book Create Resolver
@@ -70,7 +81,7 @@ export class BookGetResolver extends BaseGetResolver {}
 
 /**
  * Book Update Resolver
- * 
+ *
  * Updates a single resource using the resource id
  */
 @Resolver()
@@ -78,7 +89,7 @@ export class BookUpdateResolver extends BaseUpdateResolver {}
 
 /**
  * Book Delete Resolver
- * 
+ *
  * Deletes a single resource using the resource id
  */
 @Resolver()
@@ -87,7 +98,7 @@ export class BookDeleteResolver extends BaseDeleteResolver {}
 /**
  * Book Search Resolver
  */
-@Resolver(of => Book)
+@Resolver((of) => Book)
 export class BookSearchResolver extends BaseSearchResolver {
   /**
    * Returns a chapter relay connection

@@ -1,8 +1,8 @@
-import { InputType, Field, Resolver } from "type-graphql";
-import { IsEmail } from "class-validator";
-import { createInsertResolver, generateToken } from "gql-server";
-import { AuthTokens } from "../entity/token";
-import { User } from "../entity/user";
+import { InputType, Field, Resolver } from 'type-graphql';
+import { IsEmail } from 'class-validator';
+import { createInsertResolver, generateToken } from 'gql-server';
+import { AuthTokens } from '../entity/token';
+import { User } from '../entity/user';
 import bcrypt from 'bcrypt';
 
 /**
@@ -46,7 +46,7 @@ const BaseCreateResolver = createInsertResolver({
     const { email, password } = data as TokenCreateInput;
     const user = await User.findOne({ where: { email, archived: false } });
     const userIsValid = await bcrypt.compare(password, user?.password || '');
-    if(!user || !user.confirmed || !userIsValid) return null;
+    if (!user || !user.confirmed || !userIsValid) return null;
 
     /**
      * Each user can only have one
@@ -58,7 +58,7 @@ const BaseCreateResolver = createInsertResolver({
         archived: false
       }
     });
-    
+
     const { refreshToken, accessToken } = generateToken({ userId: user.id, role: user.role });
     /**
      * If a refresh token already exists,
@@ -70,7 +70,7 @@ const BaseCreateResolver = createInsertResolver({
       tokens.accessToken = accessToken;
       return tokens;
     }
-    
+
     /**
      * Else return a new refresh token and access token
      * and save the token to the database
@@ -82,7 +82,7 @@ const BaseCreateResolver = createInsertResolver({
 
     return await tokens.save();
   }
-}) as any;
+});
 
 /**
  * Token Create Resolver

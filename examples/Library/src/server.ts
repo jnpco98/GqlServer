@@ -1,5 +1,16 @@
 import 'reflect-metadata';
-import { Log, logInternalError, initializeConnection, isDevelopment, isTesting, isStaging, isProduction, MaxComplexityError, createSchema, IContext } from 'gql-server';
+import {
+  Log,
+  logInternalError,
+  initializeConnection,
+  isDevelopment,
+  isTesting,
+  isStaging,
+  isProduction,
+  MaxComplexityError,
+  createSchema,
+  IContext
+} from 'gql-server';
 
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
@@ -12,7 +23,6 @@ import { getComplexity, simpleEstimator, fieldExtensionsEstimator } from 'graphq
 import path from 'path';
 
 import { ROLES, User } from './entity/user';
-
 
 /**
  * Data contained in the
@@ -100,7 +110,6 @@ export function authChecker({ context }: { context: IContext }, roles: string[])
   return false;
 }
 
-
 /**
  * Handles and transforms the errors
  *
@@ -112,10 +121,8 @@ function formatGraphqlError(error: GraphQLError) {
 
   const genericError = new GraphQLError(`Internal Server Error: ${logInternalError(error)}`);
 
-  if(error.message.includes('Database Error:')) 
-    return genericError;
-  if (error instanceof ApolloError || error.originalError instanceof ApolloError) 
-    return error;
+  if (error.message.includes('Database Error:')) return genericError;
+  if (error instanceof ApolloError || error.originalError instanceof ApolloError) return error;
   if (error instanceof ArgumentValidationError || error.originalError instanceof ArgumentValidationError) {
     if (error.extensions) error.extensions.code = 'GRAPHQL_VALIDATION_FAILED';
     return error;
@@ -130,8 +137,7 @@ function formatGraphqlError(error: GraphQLError) {
 async function main() {
   const connection = await initializeConnection();
 
-  if (!process.env.APPLICATION_NAME) 
-    throw new Error(`Application must be set up`);
+  if (!process.env.APPLICATION_NAME) throw new Error(`Application must be set up`);
 
   /**
    * NODE_ENV must be set one of the following
@@ -150,10 +156,7 @@ async function main() {
 
   const MAX_QUERY_COST = parseInt(process.env.GQL_MAX_QUERY_COST || '1000');
 
-  const resolverPath = path.resolve(
-    __dirname,
-    `resolvers/**/!(*.test|*.spec).${isProduction() ? 'js' : 'ts'}`
-  );
+  const resolverPath = path.resolve(__dirname, `resolvers/**/!(*.test|*.spec).${isProduction() ? 'js' : 'ts'}`);
 
   const schema = await createSchema(resolverPath, authChecker);
 
@@ -175,9 +178,7 @@ async function main() {
              */
             const complexity = getComplexity({
               schema,
-              query: request.operationName
-                ? separateOperations(document)[request.operationName]
-                : document,
+              query: request.operationName ? separateOperations(document)[request.operationName] : document,
               variables: request.variables,
               estimators: [fieldExtensionsEstimator(), simpleEstimator({ defaultComplexity: 1 })]
             });
@@ -185,18 +186,16 @@ async function main() {
             try {
               let role = ROLES.member;
 
-              if(request.http && request.http.headers && request.http?.headers.get('authorization')) {
+              if (request.http && request.http.headers && request.http?.headers.get('authorization')) {
                 const authorization = request.http?.headers.get('authorization')?.split(' ')[1];
                 const authDecoded = verify(authorization || '', process.env.GQL_SERVER_ACCESS_TOKEN_SECRET!);
-                if(authDecoded && (authDecoded as any).role) role = (authDecoded as any).role;
+                if (authDecoded && (authDecoded as any).role) role = (authDecoded as any).role;
               }
 
-              if(complexity > MAX_QUERY_COST && role !== ROLES.owner)
+              if (complexity > MAX_QUERY_COST && role !== ROLES.owner)
                 throw new MaxComplexityError(complexity, MAX_QUERY_COST);
-
             } catch (e) {
-              if(complexity > MAX_QUERY_COST) 
-                throw new MaxComplexityError(complexity, MAX_QUERY_COST);
+              if (complexity > MAX_QUERY_COST) throw new MaxComplexityError(complexity, MAX_QUERY_COST);
             }
           }
         })
@@ -216,7 +215,9 @@ async function main() {
 
   app.listen(process.env.GQL_SERVER_PORT || 5000, () => {
     Log.info(
-      `Server ready at http://localhost:${process.env.GQL_SERVER_PORT || 5000}${server.graphqlPath} env: ${process.env.NODE_ENV}`
+      `Server ready at http://localhost:${process.env.GQL_SERVER_PORT || 5000}${server.graphqlPath} env: ${
+        process.env.NODE_ENV
+      }`
     );
   });
 }

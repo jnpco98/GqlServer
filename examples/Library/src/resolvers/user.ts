@@ -1,8 +1,8 @@
-import { InputType, Field, Resolver, Mutation, Arg, Query, Ctx } from "type-graphql";
-import { Length, IsEmail } from "class-validator";
+import { InputType, Field, Resolver, Mutation, Arg, Query, Ctx } from 'type-graphql';
+import { Length, IsEmail } from 'class-validator';
 import bcrypt from 'bcrypt';
-import { IContext } from "gql-server";
-import { User } from "../entity/user";
+import { IContext } from 'gql-server';
+import { User } from '../entity/user';
 
 /**
  * Required parameters to
@@ -30,9 +30,7 @@ class UserCreateInput {
 @Resolver()
 export class UserCreateResolver {
   @Mutation((returns) => User, { nullable: true })
-  async userCreate(
-    @Arg('data') { username, password, email }: UserCreateInput
-  ): Promise<User | null> {
+  async userCreate(@Arg('data') { username, password, email }: UserCreateInput): Promise<User | null> {
     const user = new User();
     user.username = username;
     user.password = await bcrypt.hash(password, 12);

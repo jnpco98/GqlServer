@@ -1,11 +1,20 @@
-import { createGetResolver, createSearchResolver, createInsertResolver, createUpdateResolver, createDeleteResolver, StringWhere, createConnectionDefinition, createQueryInput } from 'gql-server';
+import {
+  createGetResolver,
+  createSearchResolver,
+  createInsertResolver,
+  createUpdateResolver,
+  createDeleteResolver,
+  StringWhere,
+  createConnectionDefinition,
+  createQueryInput
+} from 'gql-server';
 import { InputType, Field, Resolver } from 'type-graphql';
 import { Chapter } from '../entity/chapter';
 
 const BaseGetResolver = createGetResolver({
   EntityType: Chapter,
   resource: 'chapter'
-}) as any;
+});
 
 /**
  * Filters for querying resource
@@ -29,26 +38,25 @@ const BaseSearchResolver = createSearchResolver({
   QueryableInputType: ChapterQueryableInput,
   ConnectionType: ChapterConnectionDefinition,
   resource: 'chapter'
-}) as any;
+});
 
 const BaseCreateResolver = createInsertResolver({
   EntityType: Chapter,
   MutationInputType: Chapter,
   resource: 'chapter'
-}) as any;
+});
 
 const BaseUpdateResolver = createUpdateResolver({
   EntityType: Chapter,
   MutationInputType: Chapter,
   resource: 'chapter'
-}) as any;
+});
 
 const BaseDeleteResolver = createDeleteResolver({
   EntityType: Chapter,
   MutationInputType: Chapter,
   resource: 'chapter'
-}) as any;
-
+});
 
 /**
  * Chapter Create Resolver
@@ -66,7 +74,7 @@ export class ChapterGetResolver extends BaseGetResolver {}
 
 /**
  * Chapter Update Resolver
- * 
+ *
  * Updates a single resource using the resource id
  */
 @Resolver()
@@ -80,13 +88,13 @@ export class ChapterSearchResolver extends BaseSearchResolver {}
 
 /**
  * Chapter Delete Resolver
- * 
+ *
  * Deletes a single resource using the resource id
  */
 @Resolver()
 export class ChapterDeleteResolver extends BaseDeleteResolver {}
 
 const ChapterQueryInput = createQueryInput<Chapter, ChapterQueryableInput>('chapter', ChapterQueryableInput);
-console.log(Object.keys(ChapterQueryInput))
+console.log(Object.keys(ChapterQueryInput));
 
 export { ChapterConnectionDefinition, ChapterQueryInput };

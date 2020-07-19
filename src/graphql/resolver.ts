@@ -40,7 +40,7 @@ export interface IResolverMutableParams<T extends BaseEntity, U> extends IBaseRe
 
 export type TResolverResult<T> = Promise<T | ICursorConnection<T> | null | undefined>;
 
-abstract class BaseGetResolver<T> {
+interface IBaseGetResolver<T> {
   apply: (id: string, ctx: IContext) => TResolverResult<T>;
 }
 
@@ -48,7 +48,7 @@ export function createGetResolver<T extends BaseEntity>(params: IBaseResolverPar
   const { EntityType, resource, accessLevels, contextCallback, middleware } = params;
 
   @Resolver({ isAbstract: true })
-  abstract class GetResolver {
+  abstract class BaseGetResolver {
     @Authorized(accessLevels || [])
     @UseMiddleware(middleware || [])
     @Query((returns) => EntityType, { name: `${resource}`, nullable: true })
@@ -61,16 +61,14 @@ export function createGetResolver<T extends BaseEntity>(params: IBaseResolverPar
     }
   }
 
-  return GetResolver as BaseGetResolver<T>;
+  return BaseGetResolver as ClassType<IBaseGetResolver<T>>;
 }
 
-class BaseSearchResolver<T> {
+interface IBaseSearchResolver<T> {
   apply: (ctx: IContext, connArgs: ConnectionArgs, query: IWhereAggregate) => TResolverResult<T>;
 }
 
-export function createSearchResolver<T extends BaseEntity>(
-  params: IResolverQueryableParams<T>
-) {
+export function createSearchResolver<T extends BaseEntity>(params: IResolverQueryableParams<T>) {
   const {
     EntityType,
     QueryableInputType,
@@ -83,7 +81,7 @@ export function createSearchResolver<T extends BaseEntity>(
   const WhereInputType = QueryableInputType ? createQueryInput(capitalize(resource), QueryableInputType) : null;
 
   @Resolver({ isAbstract: true })
-  abstract class SearchResolver {
+  abstract class BaseSearchResolver {
     @Authorized(accessLevels || [])
     @UseMiddleware(middleware || [])
     @Query((returns) => ConnectionType.Connection, {
@@ -104,10 +102,10 @@ export function createSearchResolver<T extends BaseEntity>(
     }
   }
 
-  return SearchResolver as BaseSearchResolver<T>;
+  return BaseSearchResolver as ClassType<IBaseSearchResolver<T>>;
 }
 
-class BaseInsertResolver<T, U> {
+interface IBaseInsertResolver<T, U> {
   apply: (data: U, ctx: IContext) => TResolverResult<T>;
 }
 
@@ -115,7 +113,7 @@ export function createInsertResolver<T extends BaseEntity, U>(params: IResolverM
   const { EntityType, MutationInputType, resource, accessLevels, contextCallback, middleware, getCreatorId } = params;
 
   @Resolver({ isAbstract: true })
-  abstract class InsertResolver {
+  abstract class BaseInsertResolver {
     @Authorized(accessLevels || [])
     @UseMiddleware(middleware || [])
     @Mutation((returns) => EntityType, {
@@ -130,10 +128,10 @@ export function createInsertResolver<T extends BaseEntity, U>(params: IResolverM
     }
   }
 
-  return InsertResolver as BaseInsertResolver<T, U>;
+  return BaseInsertResolver as ClassType<IBaseInsertResolver<T, U>>;
 }
 
-class BaseUpdateResolver<T, U> {
+interface IBaseUpdateResolver<T, U> {
   apply: (id: string, data: U, ctx: IContext) => TResolverResult<T>;
 }
 
@@ -141,7 +139,7 @@ export function createUpdateResolver<T extends BaseEntity, U>(params: IResolverM
   const { EntityType, MutationInputType, resource, accessLevels, contextCallback, middleware } = params;
 
   @Resolver({ isAbstract: true })
-  abstract class UpdateResolver {
+  abstract class BaseUpdateResolver {
     @Authorized(accessLevels || [])
     @UseMiddleware(middleware || [])
     @Mutation((returns) => EntityType, {
@@ -162,10 +160,10 @@ export function createUpdateResolver<T extends BaseEntity, U>(params: IResolverM
     }
   }
 
-  return UpdateResolver as BaseUpdateResolver<T, U>;
+  return BaseUpdateResolver as ClassType<IBaseUpdateResolver<T, U>>;
 }
 
-class BaseDeleteResolver<T> {
+interface IBaseDeleteResolver<T> {
   apply: (id: string, ctx: IContext) => TResolverResult<T>;
 }
 
@@ -173,7 +171,7 @@ export function createDeleteResolver<T extends BaseEntity, U>(params: IResolverM
   const { EntityType, MutationInputType, resource, accessLevels, contextCallback, middleware } = params;
 
   @Resolver({ isAbstract: true })
-  abstract class DeleteResolver {
+  abstract class BaseDeleteResolver {
     @Authorized(accessLevels || [])
     @UseMiddleware(middleware || [])
     @Mutation((returns) => EntityType, {
@@ -194,5 +192,5 @@ export function createDeleteResolver<T extends BaseEntity, U>(params: IResolverM
     }
   }
 
-  return DeleteResolver as BaseDeleteResolver<T>;
+  return BaseDeleteResolver as ClassType<IBaseDeleteResolver<T>>;
 }

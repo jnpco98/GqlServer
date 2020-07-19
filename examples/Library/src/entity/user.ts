@@ -1,6 +1,6 @@
 import { BaseEntity } from 'gql-server';
-import { ObjectType, Field } from "type-graphql";
-import { Entity, Column } from "typeorm";
+import { ObjectType, Field } from 'type-graphql';
+import { Entity, Column } from 'typeorm';
 
 /**
  * Access control roles
